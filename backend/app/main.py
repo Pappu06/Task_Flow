@@ -1,23 +1,37 @@
 from fastapi import FastAPI
+from mockData import products
 
-app = FastAPI(
-    title="TaskFlow API",
-    description="API for the TaskFlow project management system",
-    version="1.0.0",
-)
-
+app = FastAPI()
 
 @app.get("/")
-async def root():
-    return {
-        "message": "Welcome to TaskFlow API",
-        "status": "running",
-    }
+def home():
+    return "Welcome to fastApi..."
+
+@app.get("/contact")
+def contact():
+    return "Contact Us any time..."
 
 
-@app.get("/api/health")
-async def health_check():
+@app.get("/products")
+def get_product():
+    return products
+
+
+# path parameter
+@app.get("/product/{product_id}")
+def get_one_product(product_id:int):
+    for oneProduct in products:
+        if oneProduct.get("id") == product_id:
+            return oneProduct
+
     return {
-        "status": "healthy",
-        "service": "TaskFlow API",
+        "error": "product not found" 
+    }        
+
+
+# Query parameter
+@app.get("/user")
+def user(user:str):
+    return {
+        "great": f"hello {user}, Hows you ?"
     }
